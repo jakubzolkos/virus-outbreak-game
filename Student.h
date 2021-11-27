@@ -27,7 +27,7 @@ class Student : public virtual GameObject
         double speed;
         bool is_at_doctor = false;
         bool is_in_class = false;
-        int antibodies = 50;
+        int antibodies = 100;
         unsigned int credits = 0;
         double dollars = 0.0;
         unsigned int assignments_to_buy = 0;

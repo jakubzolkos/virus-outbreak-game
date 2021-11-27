@@ -73,5 +73,65 @@ void DoRunCommand(Model &model, View &view)
 
 void NewCommand(Model &model, char code, int id, Point2D location)
 {
+    try
+    {
+        switch (code)
+        {
+            case 'd':
+                if (model.GetDoctorsOfficePtr(id) != NULL)
+                    throw (Invalid_Input("DoctorsOffice with ID number " + to_string(id) + " already exists."));
 
+                else
+                {
+                    DoctorsOffice *office = new DoctorsOffice(id, 1, 100, location);
+                    model.AddNewMember(code, office);
+                    break;
+                }
+            case 'c':
+                if (model.GetClassRoomPtr(id) != NULL)
+                    throw (Invalid_Input("ClassRoom with ID number " + to_string(id) + " already exists."));
+                
+                else
+                {
+                    ClassRoom *classroom = new ClassRoom(15, 5, 5, 4, id, location);
+                    model.AddNewMember(code, classroom);
+                    break;
+                }
+
+            case 's':
+                if (model.GetStudentPtr(id) != NULL)
+                    throw (Invalid_Input("Student with ID number " + to_string(id) + " already exists."));
+                
+                else
+                {
+                    Student *student = new Student("Student " + to_string(id), id, 'S', 5, location);
+                    model.AddNewMember(code, student);
+                    break;
+                }
+
+            case 'v':
+            {
+                if (model.GetVirusPtr(id) != NULL)
+                    throw (Invalid_Input("Virus with ID number " + to_string(id) + " already exists."));
+                
+                else
+                {
+                    Virus *virus = new Virus("Virus " + to_string(id), 5, 5, 15, false, id, location);
+                    model.AddNewMember(code, virus);
+                    break;
+                }
+            }
+
+            // If the type is invalid or any other error occures
+            default:
+                throw (Invalid_Input("Invalid type or the object with the selected ID already exists."));
+        }
+    }
+
+    catch (Invalid_Input &except)
+    {
+        cout << "Invalid input - " << except.msg_ptr << endl;
+    }
+
+    return;
 }

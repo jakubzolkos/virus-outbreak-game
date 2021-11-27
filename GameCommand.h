@@ -1,6 +1,7 @@
 #ifndef GAMECOMMAND_H
 #define GAMECOMMAND_H
 #include "Model.h"
+#include "Input_Handling.h"
 
 void DoMoveCommand(Model &model, int student_id, Point2D p1);
 void DoMoveToDoctorCommand(Model &model, int student_id, int office_id);

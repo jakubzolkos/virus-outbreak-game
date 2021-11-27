@@ -1,6 +1,5 @@
 #include <iostream>
 #include "Virus.h"
-#include "Model.h"
 #include <list>
 #include <random>
 using namespace std;
@@ -71,7 +70,17 @@ bool Virus::UpdateLocation()
                 Vector2D delta(distr(eng), distr(eng));
                 location = location + delta;
                 if (location.x >= 0 && location.x <= 20 && location.y >= 0 && location.y <= 20)
+                {   
+                    if (energy >= 0)
+                        energy -= 1/(resistance*resistance);
+                    else
+                    {
+                        state = DEAD;
+                        energy = 0.0;
+                    }
+
                     break;
+                }
             }
 
             return true;
@@ -79,7 +88,6 @@ bool Virus::UpdateLocation()
         }
         case IN_STUDENT:
             location = (*current_student).GetLocation();
-            
             // If the student runs out of antibodies, release the virus in the environment again
             if ((*current_student).IsInfected())
                 state = IN_ENVIRONMENT;
@@ -97,31 +105,31 @@ bool Virus::UpdateLocation()
 
 
 void Virus::infect(Student *s)
-{
-    if (state == IN_ENVIRONMENT && GetDistanceBetween(GetLocation(), (*s).GetLocation()) <= 3)
+{ 
+    if (state == IN_ENVIRONMENT)
     {
         state = IN_STUDENT;
         current_student = s;
         (*s).AddVirus(this);  
         cout << (*s).GetName() << " has been infected with " << name << "!" << endl;
-        return;
     }
+
     else
         return;
+
+    return;
 }
 
 bool Virus::Update()
 {
     if (IsAlive())
     {
-        energy -= 1/(resistance*resistance);
         UpdateLocation();
-        return true;
+        return false;
     }
 
     else 
     {
-        state = DEAD;
         return true;
     }
 
@@ -176,4 +184,10 @@ bool Virus::ShouldBeVisible()
 
     else
         return true;
+}
+
+void Virus::destroy_self()
+{
+    state = DEAD;
+    energy = 0.0;
 }

@@ -205,6 +205,7 @@ bool Student::UpdateLocation()
                 if (virus.second >= virulence)
                 {
                     virus.second = virulence;
+                    (*virus.first).destroy_self();
                     cout << (*virus.first).get_name() << " has been eliminated!" << endl;
                 }
                 

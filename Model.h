@@ -26,9 +26,11 @@ class Model
         Student* GetStudentPtr(int id);
         DoctorsOffice* GetDoctorsOfficePtr(int id); 
         ClassRoom* GetClassRoomPtr(int id);
+        Virus* GetVirusPtr(int id);
         bool Update();
         void Display(View &view);
         void ShowStatus();
+        void AddNewMember(char chode, GameObject* object);
 };
 
 #endif

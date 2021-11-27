@@ -4,8 +4,6 @@
 #include "View.h"
 using namespace std;
 
-class Model;
-
 class Virus : public GameObject
 {
     enum VirusStates
@@ -30,6 +28,7 @@ class Virus : public GameObject
         Virus(string name, double virulence, double resistance, double energy, bool variant, int id, Point2D in_loc);
         virtual ~Virus();
         void infect(Student *s);
+        void destroy_self();
         bool get_variant();
         double get_virulence();
         double get_resistance();
