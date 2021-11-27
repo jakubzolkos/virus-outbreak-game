@@ -1,7 +1,10 @@
 #ifndef VIRUS_H
 #define VIRUS_H
 #include "Student.h"
-#include "Model.h"
+#include "View.h"
+using namespace std;
+
+class Model;
 
 class Virus : public GameObject
 {
@@ -20,22 +23,24 @@ class Virus : public GameObject
         double energy = 10;
         bool is_in_student = false;
         string name;
-        Student *current_student;
+        Student *current_student = NULL;
     
     public:
+        Virus(string name, int id, Point2D in_loc);
         Virus(string name, double virulence, double resistance, double energy, bool variant, int id, Point2D in_loc);
-        ~Virus();
+        virtual ~Virus();
         void infect(Student *s);
         bool get_variant();
         double get_virulence();
         double get_resistance();
         double get_energy();
         bool get_in_student();
-        bool Update();
+        string get_name();
+        virtual bool Update();
         void ShowStatus();
         bool IsAlive();
-        void UpdateLocation(Model &model);
-        void SetupDestination(Point2D dest)
+        bool ShouldBeVisible();
+        bool UpdateLocation();
 };
 
 #endif

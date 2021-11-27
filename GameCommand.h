@@ -10,5 +10,6 @@ void DoLearningCommand(Model &model, int student_it, unsigned int assignments);
 void DoRecoverInOfficeCommand(Model &model, int student_id, unsigned int vaccine_needs);
 void DoGoCommand(Model &model, View &view);
 void DoRunCommand(Model &model, View &view);
+void NewCommand(Model &model, char code, int id, Point2D location);
 
 #endif

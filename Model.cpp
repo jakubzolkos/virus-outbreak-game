@@ -2,6 +2,7 @@
 #include "DoctorsOffice.h"
 #include "Student.h"
 #include "ClassRoom.h"
+#include "Virus.h"
 #include <stdlib.h> 
 using namespace std;
 
@@ -9,17 +10,19 @@ Model::Model() : time(0)
 {
     Student *S1 = new Student(string("Homer"), 1, 'S', 2, Point2D(5, 1));
     Student *S2 = new Student(string("Marge"), 2, 'S', 1, Point2D(10, 1));
-    // Virus *V1 = new Virus(string("COVID-19"))
+    Virus *V1 = new Virus(string("COVID-19"), 8, 3, 20, false, 1, Point2D(15, 5));
+    Virus *V2 = new Virus(string("Influenza"), 2, Point2D(10, 12));
     DoctorsOffice *D1 = new DoctorsOffice(1, 1, 100, Point2D(1, 20));
     DoctorsOffice *D2 = new DoctorsOffice(2, 2, 200, Point2D(10, 20));
     ClassRoom *C1 = new ClassRoom(10, 1, 2.0, 3, 1, Point2D(0, 0));
     ClassRoom *C2 = new ClassRoom(20, 5, 7.5, 4, 2, Point2D(5, 5));
 
-    object_ptrs = {S1, S2, D1, D2, C1, C2};
-    active_ptrs = {};
+    object_ptrs = {S1, S2, D1, D2, C1, C2, V1, V2};
+    active_ptrs = {S1, S2, V1, V2};
     office_ptrs = {D1, D2};
     class_ptrs = {C1, C2};
     student_ptrs = {S1, S2};
+    virus_ptrs = {V1, V2};
 
     cout << "Model default constructed" << endl;
 }
@@ -87,9 +90,10 @@ bool Model::Update()
         }
     }
 
-    // Check if all the students are infected
+
+    // Check if all the students are infected 
     for (Student* &student : student_ptrs)
-    {
+    {   
         changed = (*student).IsInfected();
 
         if (!changed)
@@ -127,6 +131,14 @@ bool Model::Update()
     {
         cout << endl << "GAME OVER: You win! All assignments done!" << endl;
         exit(0);
+    }
+
+    for (Student* &student : student_ptrs)
+    {
+        for (Virus* &virus : virus_ptrs)
+        {
+            (*virus).infect(student);
+        }
     }
 
     return result;

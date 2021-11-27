@@ -1,7 +1,9 @@
 #include "Student.h"
-#include "math.h"
+#include "Virus.h"
 #include <random>
 #include <iomanip>
+#include <math.h>
+#include "Virus.h"
 using namespace std;
 
 double GetRandomAmountOfDollars()
@@ -178,7 +180,37 @@ bool Student::UpdateLocation()
     {
         cout << display_code << id_num << ": step..." << endl;
         location = location + delta;
-        
+
+        for (pair <Virus*, double> &virus : viruses_contracted)
+        {
+            double virulence = (*virus.first).get_virulence(); // Obtain virulence of the contracted virus
+            double virus_resistance = (*virus.first).get_resistance();
+            double student_resistance = virus.second;
+            cout << student_resistance << " " << virulence << endl;
+
+            if (student_resistance >= virulence)
+                continue;
+            
+            else
+            {
+                antibodies -= ceil(0.5 * (virulence - student_resistance));
+                virus.second += 0.5 + student_resistance/virus_resistance;
+
+                if (antibodies <= 0)
+                {
+                    antibodies = 0;
+                    state = INFECTED;
+                }
+
+                if (virus.second >= virulence)
+                {
+                    virus.second = virulence;
+                    cout << (*virus.first).get_name() << " has been eliminated!" << endl;
+                }
+                
+            }
+        }
+
         if (antibodies != 0)
             antibodies -= 1;
 
@@ -411,4 +443,10 @@ bool Student::Update()
     }
 
     return false;
+}
+
+void Student::AddVirus(Virus* virus)
+{
+    pair <Virus*, double> new_virus(virus, 0.0);
+    viruses_contracted.push_back(new_virus);
 }

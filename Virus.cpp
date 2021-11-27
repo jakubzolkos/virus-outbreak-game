@@ -1,10 +1,19 @@
 #include <iostream>
 #include "Virus.h"
+#include "Model.h"
+#include <list>
+#include <random>
 using namespace std;
 
 
+Virus::Virus(string name, int id, Point2D in_loc) : GameObject(in_loc, id, 'V'), name(name)
+{
+    state = IN_ENVIRONMENT;
+    cout << "Virus constructed" << endl;
+}
+
 Virus::Virus(string name, double virulence, double resistance, double energy,
-bool variant, int id, Point2D in_loc) : GameObject(in_loc, id, 'V')
+bool variant, int id, Point2D in_loc) : GameObject(in_loc, id, 'V'), name(name), virulence(virulence), resistance(resistance), energy(energy), variant(variant) 
 {
     state = IN_ENVIRONMENT;
     cout << "Virus constructed" << endl;
@@ -15,18 +24,10 @@ Virus::~Virus()
     cout << "Virus destructed" << endl;
 }
 
-void Virus::infect(Student *s)
-{
-    if (GetDistanceBetween(GetLocation(), (*s).GetLocation()) == 0)
-    {
-        state = IN_STUDENT;
-    }
-
-    return;
-}
-
 bool Virus::get_variant()
-{}
+{
+    return false;
+}
 
 double Virus::get_virulence() 
 {
@@ -48,18 +49,83 @@ bool Virus::get_in_student()
     return is_in_student;
 }
 
-bool Virus::Update()
+string Virus::get_name()
 {
-    if (state == IN_ENVIRONMENT)
+    return name;
+}
+
+bool Virus::UpdateLocation()
+{
+    switch (state)
     {
-        return false;
+        case IN_ENVIRONMENT:
+        {
+            cout << display_code << id_num << ": step..." << endl;
+            random_device rd;
+            default_random_engine eng(rd());
+            uniform_real_distribution <double> distr(-3, 3);
+
+            // This ensures that the virus objects always stay in display
+            while (true)
+            {
+                Vector2D delta(distr(eng), distr(eng));
+                location = location + delta;
+                if (location.x >= 0 && location.x <= 20 && location.y >= 0 && location.y <= 20)
+                    break;
+            }
+
+            return true;
+            break;
+        }
+        case IN_STUDENT:
+            location = (*current_student).GetLocation();
+            
+            // If the student runs out of antibodies, release the virus in the environment again
+            if ((*current_student).IsInfected())
+                state = IN_ENVIRONMENT;
+            
+            return true;
+            break;
+        
+        case DEAD:
+            return false;
+            break;
     }
 
-    else if (!IsAlive())
+    return false;
+}
+
+
+void Virus::infect(Student *s)
+{
+    if (state == IN_ENVIRONMENT && GetDistanceBetween(GetLocation(), (*s).GetLocation()) <= 3)
+    {
+        state = IN_STUDENT;
+        current_student = s;
+        (*s).AddVirus(this);  
+        cout << (*s).GetName() << " has been infected with " << name << "!" << endl;
+        return;
+    }
+    else
+        return;
+}
+
+bool Virus::Update()
+{
+    if (IsAlive())
+    {
+        energy -= 1/(resistance*resistance);
+        UpdateLocation();
+        return true;
+    }
+
+    else 
     {
         state = DEAD;
         return true;
     }
+
+    return false;
 
 }
 
@@ -101,14 +167,13 @@ bool Virus::IsAlive()
     }
 }
 
-void Virus::SetupDestination(Point2D dest)
+bool Virus::ShouldBeVisible()
 {
-    destination = dest;
-    delta = (destination - location) * (speed / GetDistanceBetween(destination, location));
-    return;
-}
+    if (state == DEAD)
+    {
+        return false;
+    }
 
-void Virus::UpdateLocation(Model &model)
-{
-    
+    else
+        return true;
 }

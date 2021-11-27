@@ -1,5 +1,6 @@
 #ifndef MODEL_H
 #define MODEL_H
+#include "GameObject.h"
 #include "Student.h"
 #include "DoctorsOffice.h"
 #include "ClassRoom.h"

@@ -3,7 +3,10 @@
 #include "GameObject.h"
 #include "DoctorsOffice.h"
 #include "ClassRoom.h"
-#include "Virus.h"
+#include <utility>
+#include <list>
+
+class Virus;
 
 class Student : public virtual GameObject
 {
@@ -24,7 +27,7 @@ class Student : public virtual GameObject
         double speed;
         bool is_at_doctor = false;
         bool is_in_class = false;
-        unsigned int antibodies = 20;
+        int antibodies = 50;
         unsigned int credits = 0;
         double dollars = 0.0;
         unsigned int assignments_to_buy = 0;
@@ -36,6 +39,7 @@ class Student : public virtual GameObject
         ClassRoom *old_classroom = NULL;
         Point2D destination;
         Vector2D delta;
+        list <pair <Virus*, double>> viruses_contracted;
     
     protected:
         
@@ -57,7 +61,8 @@ class Student : public virtual GameObject
         void ShowStatus();
         virtual bool Update();
         bool UpdateLocation();
-        string GetName();
+        string GetName();  
+        void AddVirus(Virus* virus);    
 };
 
 #endif

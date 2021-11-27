@@ -70,3 +70,8 @@ void DoRunCommand(Model &model, View &view)
     model.ShowStatus();
     model.Display(view);
 }
+
+void NewCommand(Model &model, char code, int id, Point2D location)
+{
+
+}
