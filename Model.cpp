@@ -109,7 +109,7 @@ bool Model::Update()
 
     bool changed, result = false;
 
-    // Check if any of the students is at the same location as any of the viruses. If yes, infect
+    // Check if any of the students is at the same location as any of the viruses.
     for (Student* &student : student_ptrs)
     {
         for (Virus* &virus : virus_ptrs)
@@ -119,18 +119,25 @@ bool Model::Update()
                 if ((*student).GetNumMasks() != 0)
                 {
                     cout << (*student).GetName() << " protected him/herself from infection with a mask!" << endl;
+                    (*student).RemoveMask();
+                    continue;
                 }
                 
-                if ((*student).GetNumHandSanitizers() != 0)
+                else if ((*student).GetNumHandSanitizers() != 0)
                 {
                     double chance = rand() / (RAND_MAX + 1.);
+                    (*student).RemoveHandSanitizer();
                     
                     if (chance <= 0.7)
+                    {
                         cout << (*student).GetName() << " protected him/herself from infection with a hand sanitizer!" << endl;
+                    }
                 }
 
-
-
+                else
+                {
+                    (*virus).infect(student);
+                }
             }
         }
     }
