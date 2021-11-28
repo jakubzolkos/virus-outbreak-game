@@ -69,7 +69,7 @@ bool Virus::UpdateLocation()
             {
                 Vector2D delta(distr(eng), distr(eng));
                 location = location + delta;
-                if (location.x >= 0 && location.x <= 20 && location.y >= 0 && location.y <= 20)
+                if (location.x >= 0 && location.x <= view_maxsize && location.y >= 0 && location.y <= view_maxsize)
                 {   
                     if (energy >= 0)
                         energy -= 1/(resistance*resistance);

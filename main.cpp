@@ -8,6 +8,7 @@
 #include "GameCommand.h"
 #include "Input_Handling.h"
 #include <sstream>
+#include <vector>
 using namespace std;
 
 
@@ -16,14 +17,11 @@ int main()
     char command;
     int student_id, object_id;
     string line;
-
     srand(time(NULL));
     Model model;
     View v;
     Point2D location;
-
     cout << endl;
-    
     model.ShowStatus();
     model.Display(v);
 
@@ -33,11 +31,18 @@ int main()
         line.clear();
         try 
         {
+            // vector <string> parameters;
+            // while (getline(cin, line, ' ')) 
+            // {
+            //     cout << line << " ";
+            //     parameters.push_back(line);
+            // }
+
             getline(cin, line, '\n');
             istringstream iss(line);
             command = line[0];
-            
-        
+    
+
             switch(command)
             {
                 case 'q':
@@ -95,6 +100,17 @@ int main()
                     break;
                 }
 
+                case 'p':
+                {
+                    int pharmacy_id;
+                    iss >> command >> student_id >> pharmacy_id;
+                    cout << endl;
+                    DoMoveToPharmacyCommand(model, student_id, pharmacy_id);
+                    cout << endl;
+                    v.Draw();
+                    break;
+                }
+
                 case 's':
                     iss >> command >> student_id;
                     cout << endl;
@@ -123,8 +139,19 @@ int main()
                     break;
                 }
 
+                case 'b':
+                {
+                    int quantity;
+                    char purchase_code;
+                    iss >> command >> student_id >> purchase_code >> quantity;
+                    cout << endl;
+                    DoPurchaseItemsCommand(model, student_id, purchase_code, quantity);
+                    v.Draw();
+                    break;
+                }
+
                 default:
-                    cout << "Ivalid input. Please try again." << endl;
+                    throw Invalid_Input("Ivalid input. Please try again.");
             } 
         }
 
@@ -132,6 +159,7 @@ int main()
         {
             cout << "Invalid input - " << except.msg_ptr << endl;
         }
+
 
     } while (true);
     return 0;

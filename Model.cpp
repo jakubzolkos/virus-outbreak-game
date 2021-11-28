@@ -17,13 +17,15 @@ Model::Model() : time(0)
     DoctorsOffice *D2 = new DoctorsOffice(2, 2, 200, Point2D(10, 20));
     ClassRoom *C1 = new ClassRoom(10, 1, 2.0, 3, 1, Point2D(0, 0));
     ClassRoom *C2 = new ClassRoom(20, 5, 7.5, 4, 2, Point2D(5, 5));
+    Pharmacy *P1 = new Pharmacy(1, 10, 5, 3, Point2D(12, 8));
 
-    object_ptrs = {S1, S2, D1, D2, C1, C2, V1, V2};
-    active_ptrs = {S1, S2, D1, D2, C1, C2, V1, V2};
+    object_ptrs = {S1, S2, D1, D2, C1, C2, V1, V2, P1};
+    active_ptrs = {S1, S2, D1, D2, C1, C2, V1, V2, P1};
     office_ptrs = {D1, D2};
     class_ptrs = {C1, C2};
     student_ptrs = {S1, S2};
     virus_ptrs = {V1, V2};
+    pharmacy_ptrs = {P1};
 
     cout << "Model default constructed" << endl;
 }
@@ -88,6 +90,19 @@ Virus* Model::GetVirusPtr(int id)
     return NULL;
 }
 
+Pharmacy* Model::GetPharmacyPtr(int id)
+{
+    for (Pharmacy* &pharmacy : pharmacy_ptrs)
+    {
+        if ((*pharmacy).GetId() == id)
+        {
+            return pharmacy;
+        }
+    }
+
+    return NULL;
+}
+
 bool Model::Update()
 {
     time++; // Increment game time
@@ -100,7 +115,23 @@ bool Model::Update()
         for (Virus* &virus : virus_ptrs)
         {
             if (GetDistanceBetween((*virus).GetLocation(), (*student).GetLocation()) <= 3 && !(*student).IsInfected())
-                (*virus).infect(student);
+            {
+                if ((*student).GetNumMasks() != 0)
+                {
+                    cout << (*student).GetName() << " protected him/herself from infection with a mask!" << endl;
+                }
+                
+                if ((*student).GetNumHandSanitizers() != 0)
+                {
+                    double chance = rand() / (RAND_MAX + 1.);
+                    
+                    if (chance <= 0.7)
+                        cout << (*student).GetName() << " protected him/herself from infection with a hand sanitizer!" << endl;
+                }
+
+
+
+            }
         }
     }
 

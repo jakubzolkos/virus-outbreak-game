@@ -4,6 +4,7 @@
 #include "View.h"
 using namespace std;
 
+
 class Virus : public GameObject
 {
     enum VirusStates
