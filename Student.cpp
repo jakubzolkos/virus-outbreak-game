@@ -1,5 +1,6 @@
 #include "Student.h"
 #include "Virus.h"
+#include "Model.h"
 #include <random>
 #include <iomanip>
 #include <math.h>
@@ -187,10 +188,13 @@ void Student::StartLearning(unsigned int num_assignments)
 
 }
 
-void Student::StartRecoveringAntibodies(unsigned int num_vaccines)
+void Student::StartRecoveringAntibodies(unsigned int num_vaccines, Model &model)
 {
     if (IsInfected())
         cout << display_code << id_num << ": I am infected, I should have gone to the doctor earlier.." << endl << endl;
+    
+    else if (!(*current_office).IsOpen(model))
+        cout << display_code << id_num << ": The Doctor's office is closed. Please come later." << endl << endl;
     
     else if (state != AT_DOCTORS)
         cout << display_code << id_num << ": I can only recover antibodies at Doctor's Office." << endl << endl;
@@ -311,11 +315,12 @@ bool Student::UpdateLocation()
         cout << display_code << id_num << ": step..." << endl;
         location = location + delta;
 
-        for (pair <Virus*, double> &virus : viruses_contracted)
+        for (pair <Virus*, double> &immunity : viruses_contracted)
         {
-            double virulence = (*virus.first).get_virulence(); // Obtain virulence of the contracted virus
-            double virus_resistance = (*virus.first).get_resistance();
-            double student_resistance = virus.second;
+            double virulence = (*immunity.first).get_virulence(); // Obtain virulence of the contracted virus
+            double virus_resistance = (*immunity.first).get_resistance();
+            double student_resistance = immunity.second;
+            double resistance_factor = 1;
             cout << student_resistance << " " << virulence << endl;
 
             if (student_resistance >= virulence)
@@ -323,8 +328,13 @@ bool Student::UpdateLocation()
             
             else
             {
-                antibodies -= ceil(0.5 * (virulence - student_resistance));
-                virus.second += 0.5 + student_resistance/virus_resistance;
+                if (medicine != 0)
+                {
+                    resistance_factor = 0.5;
+                }
+
+                antibodies -= ceil(0.5 * resistance_factor * virulence);
+                immunity.second += 1/virus_resistance;
 
                 if (antibodies <= 0)
                 {
@@ -332,11 +342,11 @@ bool Student::UpdateLocation()
                     state = INFECTED;
                 }
 
-                if (virus.second >= virulence)
+                if (immunity.second >= virulence)
                 {
-                    virus.second = virulence;
-                    (*virus.first).destroy_self();
-                    cout << (*virus.first).get_name() << " has been eliminated!" << endl;
+                    immunity.second = virulence;
+                    (*immunity.first).destroy_self();
+                    cout << (*immunity.first).get_name() << " has been eliminated!" << endl;
                 }
                 
             }

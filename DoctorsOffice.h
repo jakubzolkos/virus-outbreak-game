@@ -2,6 +2,8 @@
 #define DOCTORSOFFICE_H
 #include "Building.h"
 
+class Model;
+
 enum DoctorsOfficeStates 
     {
         VACCINE_AVAILABLE = 0,
@@ -26,6 +28,7 @@ class DoctorsOffice : public virtual Building
         unsigned int DistributeVaccine(unsigned int vaccine_needed);
         virtual bool Update();
         void ShowStatus();
+        bool IsOpen(Model &model);
 };
 
 #endif

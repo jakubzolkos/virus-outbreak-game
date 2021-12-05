@@ -103,44 +103,16 @@ Pharmacy* Model::GetPharmacyPtr(int id)
     return NULL;
 }
 
+unsigned int Model::GetTime()
+{
+    return time;
+}
+
 bool Model::Update()
 {
     time++; // Increment game time
 
     bool changed, result = false;
-
-    // Check if any of the students is at the same location as any of the viruses.
-    for (Student* &student : student_ptrs)
-    {
-        for (Virus* &virus : virus_ptrs)
-        {
-            if (GetDistanceBetween((*virus).GetLocation(), (*student).GetLocation()) <= 3 && !(*student).IsInfected())
-            {
-                if ((*student).GetNumMasks() != 0)
-                {
-                    cout << (*student).GetName() << " protected him/herself from infection with a mask!" << endl;
-                    (*student).RemoveMask();
-                    continue;
-                }
-                
-                else if ((*student).GetNumHandSanitizers() != 0)
-                {
-                    double chance = rand() / (RAND_MAX + 1.);
-                    (*student).RemoveHandSanitizer();
-                    
-                    if (chance <= 0.7)
-                    {
-                        cout << (*student).GetName() << " protected him/herself from infection with a hand sanitizer!" << endl;
-                    }
-                }
-
-                else
-                {
-                    (*virus).infect(student);
-                }
-            }
-        }
-    }
 
     // Update all active objects and remove dead ones
     for (list <GameObject*>::iterator it = active_ptrs.begin(); it != active_ptrs.end(); it++)
@@ -156,6 +128,46 @@ bool Model::Update()
         {
             it = active_ptrs.erase(it);
             cout << "Dead object removed" << endl;
+        }
+    }
+
+    // Check if any of the students is at the same location as any of the viruses.
+    for (Student* &student : student_ptrs)
+    {
+        for (Virus* &virus : virus_ptrs)
+        {
+            if (GetDistanceBetween((*virus).GetLocation(), (*student).GetLocation()) <= 1 && !(*student).IsInfected())
+            {
+                if ((*student).GetNumMasks() != 0)
+                {
+                    cout << (*student).GetName() << " protected him/herself from infection with a mask!" << endl;
+                    (*student).RemoveMask();
+                    continue;
+                }
+                
+                else if ((*student).GetNumHandSanitizers() != 0)
+                {
+                    double chance = rand() / (RAND_MAX + 1.);
+                    (*student).RemoveHandSanitizer();
+
+                    if (chance <= 0.4)
+                    {
+                        cout << (*student).GetName() << " protected him/herself from infection with a hand sanitizer!" << endl;
+                        continue;
+                    }
+
+                    else
+                    {
+                        (*virus).infect(student);
+                        continue;
+                    }
+                }
+
+                else
+                {
+                    (*virus).infect(student);
+                }
+            }
         }
     }
 

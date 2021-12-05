@@ -9,18 +9,30 @@
 #include "Input_Handling.h"
 #include <sstream>
 #include <vector>
+#include <cstring>
 using namespace std;
+
+// Function for tokenizing a string based on a specified delimeter
+void tokenize(string const &str, const char* delim, vector<string> &out) 
+{ 
+    char *token = strtok(const_cast<char*>(str.c_str()), delim); 
+    while (token != NULL) 
+    { 
+        out.push_back(string(token)); 
+        token = strtok(NULL, delim); 
+    } 
+} 
 
 
 int main()
 {
-    char command;
-    int student_id, object_id;
-    string line;
     srand(time(NULL));
+
     Model model;
     View v;
     Point2D location;
+    string line;
+
     cout << endl;
     model.ShowStatus();
     model.Display(v);
@@ -31,38 +43,46 @@ int main()
         line.clear();
         try 
         {
-            // vector <string> parameters;
-            // while (getline(cin, line, ' ')) 
-            // {
-            //     cout << line << " ";
-            //     parameters.push_back(line);
-            // }
-
+            // Get a command string and tokenize it with space delimeter
             getline(cin, line, '\n');
-            istringstream iss(line);
-            command = line[0];
-    
+            vector<string> params;
+            tokenize(line, " ", params); 
 
-            switch(command)
+            // If the length of the command code is greater than 1, throw exception
+            if (params[0].length() > 1)
+                throw Invalid_Input("Invalid command code");
+
+
+            switch(params[0][0])
             {
                 case 'q':
+                    if (params.size() != 1)
+                        throw Invalid_Input("Expected no parameters");
+
                     cout << endl << "Program terminated" << endl << endl;
                     return 0;
                 
                 case 'g':
+                    if (params.size() != 1)
+                        throw Invalid_Input("Expected no parameters");
+
                     DoGoCommand(model, v);
                     break;
                 
                 case 'r':
+                    if (params.size() != 1)
+                        throw Invalid_Input("Expected no parameters");
+
                     DoRunCommand(model, v);
                     break;
                 
                 case 'n':
                 {
-                    char code;
-                    iss >> command >> code >> object_id >> location.x >> location.y;
                     cout << endl;
-                    NewCommand(model, code, object_id, location);
+                    if (params.size() != 5)
+                        throw Invalid_Input("Expected a char, an integer and xy-coordinate parameters");
+
+                    NewCommand(model, params[1][0], stoi(params[2]), Point2D(stod(params[3]), stod(params[4])));
                     cout << endl;
                     v.Draw();
                     break;
@@ -70,9 +90,11 @@ int main()
 
                 case 'm':
                 {
-                    iss >> command >> student_id >> location.x >> location.y;
                     cout << endl;
-                    DoMoveCommand(model, student_id, location);
+                    if (params.size() != 4)
+                        throw Invalid_Input("Expected an integer and xy-coordinate parameters");
+
+                    DoMoveCommand(model, stoi(params[1]), Point2D(stod(params[2]), stod(params[3])));
                     cout << endl;
                     v.Draw();
                     break;
@@ -80,10 +102,11 @@ int main()
 
                 case 'd':
                 {
-                    int office_id;
-                    iss >> command >> student_id >> office_id;
                     cout << endl;
-                    DoMoveToDoctorCommand(model, student_id, office_id);
+                    if (params.size() != 3)
+                        throw Invalid_Input("Expected two integer parameters");
+
+                    DoMoveToDoctorCommand(model, stoi(params[1]), stoi(params[2]));
                     cout << endl;
                     v.Draw();
                     break;
@@ -91,61 +114,67 @@ int main()
 
                 case 'c':
                 {
-                    int classroom_id;
-                    iss >> command >> student_id >> classroom_id;
                     cout << endl;
-                    DoMoveToClassCommand(model, student_id, classroom_id);
+                    if (params.size() != 3)
+                        throw Invalid_Input("Expected two integer parameters");
+
+                    DoMoveToClassCommand(model, stoi(params[1]), stoi(params[2]));
                     cout << endl;
                     v.Draw();
                     break;
                 }
 
-                case 'p':
+                case 'h':
                 {
-                    int pharmacy_id;
-                    iss >> command >> student_id >> pharmacy_id;
                     cout << endl;
-                    DoMoveToPharmacyCommand(model, student_id, pharmacy_id);
+                    if (params.size() != 3)
+                        throw Invalid_Input("Expected two integer parameters");
+
+                    DoMoveToPharmacyCommand(model, stoi(params[1]), stoi(params[2]));
                     cout << endl;
                     v.Draw();
                     break;
                 }
 
                 case 's':
-                    iss >> command >> student_id;
                     cout << endl;
-                    DoStopCommand(model, student_id);
+                    if (params.size() != 2)
+                        throw Invalid_Input("Expected one integer parameter");
+
+                    DoStopCommand(model, stoi(params[1]));
                     cout << endl;
                     v.Draw();
                     break;
                 
                 case 'v':
                 {
-                    int vaccine_amount;
-                    iss >> command >> student_id >> vaccine_amount; 
                     cout << endl;
-                    DoRecoverInOfficeCommand(model, student_id, vaccine_amount);
+                    if (params.size() != 3)
+                        throw Invalid_Input("Expected two integer parameters");
+
+                    DoRecoverInOfficeCommand(model, stoi(params[1]), stoi(params[2]));
                     v.Draw();
                     break;
                 }
 
                 case 'a':
                 {
-                    int assignment_amount;
-                    iss >> command >> student_id >> assignment_amount;
                     cout << endl;
-                    DoLearningCommand(model, student_id, assignment_amount);
+                    if (params.size() != 3)
+                        throw Invalid_Input("Expected two integer parameters");
+
+                    DoLearningCommand(model, stoi(params[1]), stoi(params[2]));
                     v.Draw();
                     break;
                 }
 
-                case 'b':
+                case 'p':
                 {
-                    int quantity;
-                    char purchase_code;
-                    iss >> command >> student_id >> purchase_code >> quantity;
                     cout << endl;
-                    DoPurchaseItemsCommand(model, student_id, purchase_code, quantity);
+                    if (params.size() != 4)
+                        throw Invalid_Input("Expected two integer parameters and one char parameter");
+
+                    DoPurchaseItemsCommand(model, stoi(params[1]), params[2][0], stoi(params[3]));
                     v.Draw();
                     break;
                 }
@@ -155,9 +184,14 @@ int main()
             } 
         }
 
-        catch (Invalid_Input& except)
+        catch (Invalid_Input &except)
         {
             cout << "Invalid input - " << except.msg_ptr << endl;
+        }
+
+        catch (invalid_argument &ia)
+        {
+            cout << "Invalid input - invalid argument types" << endl;
         }
 
 

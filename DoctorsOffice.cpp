@@ -1,4 +1,5 @@
 #include "DoctorsOffice.h"
+#include "Model.h"
 using namespace std;
 
 DoctorsOffice::DoctorsOffice()
@@ -85,4 +86,13 @@ void DoctorsOffice::ShowStatus()
     cout << "\tHas " << num_vaccine_remaining << " vaccine(s) remaining." << endl; 
 
     return;
+}
+
+bool DoctorsOffice::IsOpen(Model &model)
+{
+    if (model.GetTime()%6 == 0 || model.GetTime()%7 == 0)
+        return false;
+    
+    else
+        return true;
 }

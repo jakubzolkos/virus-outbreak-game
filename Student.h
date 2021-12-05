@@ -9,6 +9,8 @@
 
 class Virus;
 
+class Model;
+
 class Student : public virtual GameObject
 {
     enum StudentStates 
@@ -34,10 +36,10 @@ class Student : public virtual GameObject
         bool is_in_pharmacy = false;
         int antibodies = 100;
         unsigned int credits = 0;
-        double dollars = 0.0;
+        double dollars = 200.0;
         unsigned int hand_sanitizers = 0;
         unsigned int medicine = 0;
-        unsigned int masks = 0;
+        unsigned int masks = 10;
         unsigned int quantity_to_buy;
         char purchase_code = ' ';
         unsigned int assignments_to_buy = 0;
@@ -67,7 +69,7 @@ class Student : public virtual GameObject
         void StartMovingToDoctor(DoctorsOffice *office);
         void StartMovingToPharmacy(Pharmacy *pharmacy);
         void StartLearning(unsigned int num_assignments);
-        void StartRecoveringAntibodies(unsigned int num_vaccines);
+        void StartRecoveringAntibodies(unsigned int num_vaccines, Model &model);
         void PurchaseProduct(char product, unsigned int quantity);
         unsigned int GetNumHandSanitizers();
         unsigned int GetNumMedicine();

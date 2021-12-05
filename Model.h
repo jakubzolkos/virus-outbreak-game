@@ -34,6 +34,7 @@ class Model
         void Display(View &view);
         void ShowStatus();
         void AddNewMember(char chode, GameObject* object);
+        unsigned int GetTime();
 };
 
 #endif

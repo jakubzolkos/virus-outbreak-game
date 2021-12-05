@@ -30,7 +30,7 @@ bool View::GetSubscripts(int &out_x, int &out_y, Point2D location)
 
     else
     {
-        cout << endl << "An object is outside the display" << endl;
+        cout << endl << "An object is outside the display" << endl << endl;
         return false;
     }
 }

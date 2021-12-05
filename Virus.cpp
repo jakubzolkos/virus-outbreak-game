@@ -62,16 +62,16 @@ bool Virus::UpdateLocation()
             cout << display_code << id_num << ": step..." << endl;
             random_device rd;
             default_random_engine eng(rd());
-            uniform_real_distribution <double> distr(-3, 3);
+            uniform_real_distribution <double> distr(0, 2*acos(-1));
 
             // This ensures that the virus objects always stay in display
             while (true)
             {
-                Vector2D delta(distr(eng), distr(eng));
+                Vector2D delta(2*cos(distr(eng)), 2*sin(distr(eng)));
                 location = location + delta;
                 if (location.x >= 0 && location.x <= view_maxsize && location.y >= 0 && location.y <= view_maxsize)
                 {   
-                    if (energy >= 0)
+                    if (energy > 0)
                         energy -= 1/(resistance*resistance);
                     else
                     {
