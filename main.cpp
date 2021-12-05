@@ -49,7 +49,7 @@ int main()
             tokenize(line, " ", params); 
 
             // If the length of the command code is greater than 1, throw exception
-            if (params[0].length() > 1)
+            if (params[0].length() > 1 || params.size() == 0)
                 throw Invalid_Input("Invalid command code");
 
 

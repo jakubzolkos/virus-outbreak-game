@@ -283,7 +283,7 @@ void Student::PurchaseProduct(char product, unsigned int quantity)
                 if ((*current_pharmacy).GetNumMasksRemaining() < quantity)
                 {
                     cout << display_code << id_num << ": Purchasing " << (*current_pharmacy).GetNumMasksRemaining() << " mask(s) at Pharmacy " << (*current_pharmacy).GetId() << "." << endl;
-                    (*current_pharmacy).SellProduct(product, (*current_pharmacy).GetNumMasksRemaining());
+                    quantity_to_buy = (*current_pharmacy).SellProduct(product, (*current_pharmacy).GetNumMasksRemaining());
                 }
 
                 else
@@ -317,32 +317,26 @@ bool Student::UpdateLocation()
 
         for (pair <Virus*, double> &immunity : viruses_contracted)
         {
-            double virulence = (*immunity.first).get_virulence(); // Obtain virulence of the contracted virus
-            double virus_resistance = (*immunity.first).get_resistance();
-            double student_resistance = immunity.second;
-            double resistance_factor = 1;
+            double virulence = (*immunity.first).get_virulence(); // Get the virulence of the contracted virus
+            double virus_resistance = (*immunity.first).get_resistance(); // Get the virus resistance
+            double student_resistance = immunity.second; // Get current student resistance
             cout << student_resistance << " " << virulence << endl;
 
-            if (student_resistance >= virulence)
+            if (student_resistance >= virulence) // If the student's resistance to the virus exceeds the virulence, continue
                 continue;
             
             else
             {
-                if (medicine != 0)
-                {
-                    resistance_factor = 0.5;
-                }
-
-                antibodies -= ceil(0.5 * resistance_factor * virulence);
+                antibodies -= ceil(0.5 * virulence);
                 immunity.second += 1/virus_resistance;
 
-                if (antibodies <= 0)
+                if (antibodies <= 0) // If the virus decreases the students antibodies below 0, set the state as INFECTED
                 {
                     antibodies = 0;
                     state = INFECTED;
                 }
 
-                if (immunity.second >= virulence)
+                if (immunity.second >= virulence) // If the student obtains full immunity to the virus, eliminate the virus
                 {
                     immunity.second = virulence;
                     (*immunity.first).destroy_self();
@@ -352,10 +346,11 @@ bool Student::UpdateLocation()
             }
         }
 
-        if (antibodies != 0)
+        if (antibodies != 0) // If antibodies are not equal to 0. decrease them by 1
             antibodies -= 1;
 
-        dollars += GetRandomAmountOfDollars();
+        dollars += GetRandomAmountOfDollars(); // Increase the student's money by a random amount
+
         return false;
     }
     
@@ -696,6 +691,15 @@ bool Student::Update()
 
 void Student::AddVirus(Virus* virus)
 {
-    pair <Virus*, double> new_virus(virus, 0.0);
+    double resistance_factor = 0.0;
+
+    if (medicine != 0) // If the student has medicine in inventory, boost initial immunity by 2
+    {
+        resistance_factor = 2.0;
+        medicine--;
+        cout << name << " used medicine to help with recovery!" << endl;
+    }
+
+    pair <Virus*, double> new_virus(virus, resistance_factor);
     viruses_contracted.push_back(new_virus);
 }

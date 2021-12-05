@@ -16,10 +16,9 @@ class Virus : public GameObject
     
     protected:
         double virulence = 5;
-        double infection_treshold = 2;
-        double resistance = 2;
+        double resistance = 3;
         bool variant = false;
-        double energy = 10;
+        double energy = 15;
         bool is_in_student = false;
         string name;
         Student *current_student = NULL;

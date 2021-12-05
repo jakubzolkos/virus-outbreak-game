@@ -34,12 +34,12 @@ class Student : public virtual GameObject
         bool is_at_doctor = false;
         bool is_in_class = false;
         bool is_in_pharmacy = false;
-        int antibodies = 100;
+        int antibodies = 50;
         unsigned int credits = 0;
-        double dollars = 200.0;
+        double dollars = 0.0;
         unsigned int hand_sanitizers = 0;
         unsigned int medicine = 0;
-        unsigned int masks = 10;
+        unsigned int masks = 0;
         unsigned int quantity_to_buy;
         char purchase_code = ' ';
         unsigned int assignments_to_buy = 0;
