@@ -1,4 +1,4 @@
-# COVID-19 TERMINAL GAME
+# COVID-19 Terminal Game
 
 ## Welcome to my COVID-19 Game!
 
