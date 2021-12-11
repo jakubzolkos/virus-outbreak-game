@@ -4,12 +4,11 @@
 #include "DoctorsOffice.h"
 #include "ClassRoom.h"
 #include "Pharmacy.h"
+#include "Bus.h"
 #include <utility>
 #include <list>
 
 class Virus;
-
-class Model;
 
 class Student : public virtual GameObject
 {
@@ -21,12 +20,15 @@ class Student : public virtual GameObject
         AT_DOCTORS = 3,
         IN_CLASS = 4,
         IN_PHARMACY = 5,
-        MOVING_TO_DOCTOR = 6,
-        MOVING_TO_CLASS = 7,
-        MOVING_TO_PHARMACY = 8,
-        STUDYING_IN_CLASS = 9,
-        RECOVERING_ANTIBODIES = 10,
-        PURCHASING_ITEMS = 11
+        AT_BUS_STATION = 6,
+        MOVING_TO_DOCTOR = 7,
+        MOVING_TO_CLASS = 8,
+        MOVING_TO_PHARMACY = 9,
+        MOVING_TO_BUS_STATION = 10,
+        STUDYING_IN_CLASS = 11,
+        RECOVERING_ANTIBODIES = 12,
+        PURCHASING_ITEMS = 13,
+        TRAVELING = 14,
     };
 
     private:
@@ -34,11 +36,12 @@ class Student : public virtual GameObject
         bool is_at_doctor = false;
         bool is_in_class = false;
         bool is_in_pharmacy = false;
-        int antibodies = 50;
+        bool is_at_bus_station = false;
+        int antibodies = 100;
         unsigned int credits = 0;
-        double dollars = 0.0;
+        double dollars = 30;
         unsigned int hand_sanitizers = 0;
-        unsigned int medicine = 0;
+        unsigned int medicine = 1;
         unsigned int masks = 0;
         unsigned int quantity_to_buy;
         char purchase_code = ' ';
@@ -51,6 +54,8 @@ class Student : public virtual GameObject
         ClassRoom *old_classroom = NULL;
         Pharmacy *current_pharmacy = NULL;
         Pharmacy *old_pharmacy = NULL;
+        Bus *current_bus_station = NULL;
+        Bus *old_bus_station = NULL;
         Point2D destination;
         Vector2D delta;
         list <pair <Virus*, double>> viruses_contracted;
@@ -68,9 +73,11 @@ class Student : public virtual GameObject
         void StartMovingToClass(ClassRoom *classr);
         void StartMovingToDoctor(DoctorsOffice *office);
         void StartMovingToPharmacy(Pharmacy *pharmacy);
+        void StartMovingToBusStation(Bus *bus_station);
         void StartLearning(unsigned int num_assignments);
         void StartRecoveringAntibodies(unsigned int num_vaccines, Model &model);
         void PurchaseProduct(char product, unsigned int quantity);
+        void BusTravel(Bus* bus_station);
         unsigned int GetNumHandSanitizers();
         unsigned int GetNumMedicine();
         unsigned int GetNumMasks();

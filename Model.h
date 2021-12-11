@@ -7,6 +7,7 @@
 #include "View.h"
 #include "Virus.h"
 #include "Pharmacy.h"
+#include "Bus.h"
 #include <list>
 
 class Model
@@ -20,6 +21,7 @@ class Model
         list <ClassRoom*> class_ptrs;
         list <Virus*> virus_ptrs;
         list <Pharmacy*> pharmacy_ptrs;
+        list <Bus*> bus_ptrs;
 
 
     public:
@@ -30,6 +32,7 @@ class Model
         ClassRoom* GetClassRoomPtr(int id);
         Virus* GetVirusPtr(int id);
         Pharmacy* GetPharmacyPtr(int id);
+        Bus* GetBusPtr(int id);
         bool Update();
         void Display(View &view);
         void ShowStatus();

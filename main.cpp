@@ -136,6 +136,18 @@ int main()
                     break;
                 }
 
+                case 'b':
+                {
+                    cout << endl;
+                    if (params.size() != 3)
+                        throw Invalid_Input("Expected two integer parameters");
+                    
+                    DoMoveToBusStationCommand(model, stoi(params[1]), stoi(params[2]));
+                    cout << endl;
+                    v.Draw();
+                    break;
+                }
+
                 case 's':
                     cout << endl;
                     if (params.size() != 2)
@@ -177,6 +189,19 @@ int main()
                     DoPurchaseItemsCommand(model, stoi(params[1]), params[2][0], stoi(params[3]));
                     v.Draw();
                     break;
+                }
+
+                case 't':
+                {
+                    cout << endl;
+
+                    if (params.size() != 3)
+                        throw Invalid_Input("Expected two integer parameters");
+
+                    DoBusTravelCommand(model, stoi(params[1]), stoi(params[2]));
+                    v.Draw();
+                    break;
+                    
                 }
 
                 default:

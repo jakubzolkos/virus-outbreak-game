@@ -1,31 +1,31 @@
 #include "Model.h"
-#include "DoctorsOffice.h"
-#include "Student.h"
-#include "ClassRoom.h"
-#include "Virus.h"
 #include <stdlib.h>
 #include <algorithm> 
 using namespace std;
 
 Model::Model() : time(0)
 {
-    Student *S1 = new Student(string("Homer"), 1, 'S', 2, Point2D(5, 1));
+    Student *S1 = new Student(string("Homer"), 1, 'S', 2, Point2D(5, 8));
     Student *S2 = new Student(string("Marge"), 2, 'S', 1, Point2D(10, 1));
     Virus *V1 = new Virus(string("COVID-19"), 8, 4, 20, false, 1, Point2D(15, 5));
-    Virus *V2 = new Virus(string("Influenza"), 3, Point2D(10, 12));
-    DoctorsOffice *D1 = new DoctorsOffice(1, 1, 100, Point2D(1, 20));
-    DoctorsOffice *D2 = new DoctorsOffice(2, 2, 200, Point2D(10, 20));
-    ClassRoom *C1 = new ClassRoom(10, 1, 2.0, 3, 1, Point2D(0, 0));
-    ClassRoom *C2 = new ClassRoom(20, 5, 7.5, 4, 2, Point2D(5, 5));
+    Virus *V2 = new Virus(string("Influenza"), 2, Point2D(10, 16));
+    DoctorsOffice *D1 = new DoctorsOffice(1, 3, 100, Point2D(4, 24));
+    DoctorsOffice *D2 = new DoctorsOffice(2, 4, 200, Point2D(24, 9));
+    ClassRoom *C1 = new ClassRoom(10, 1, 2.0, 3, 1, Point2D(3, 3));
+    ClassRoom *C2 = new ClassRoom(20, 5, 7.5, 4, 2, Point2D(26, 22));
     Pharmacy *P1 = new Pharmacy(1, 10, 5, 3, Point2D(12, 8));
+    Bus *B1 = new Bus(1, 7, Point2D(6, 2));
+    Bus *B2 = new Bus(2, 8, Point2D(11, 26));
+    Bus *B3 = new Bus(3, 9, Point2D(23, 14));
 
-    object_ptrs = {S1, S2, D1, D2, C1, C2, V1, V2, P1};
-    active_ptrs = {S1, S2, D1, D2, C1, C2, V1, V2, P1};
+    object_ptrs = {S1, S2, D1, D2, C1, C2, V1, V2, P1, B1, B2, B3};
+    active_ptrs = {S1, S2, D1, D2, C1, C2, V1, V2, P1, B1, B2, B3};
     office_ptrs = {D1, D2};
     class_ptrs = {C1, C2};
     student_ptrs = {S1, S2};
     virus_ptrs = {V1, V2};
     pharmacy_ptrs = {P1};
+    bus_ptrs = {B1, B2, B3};
 
     cout << "Model default constructed" << endl;
 }
@@ -103,6 +103,19 @@ Pharmacy* Model::GetPharmacyPtr(int id)
     return NULL;
 }
 
+Bus* Model::GetBusPtr(int id)
+{
+    for (Bus* &bus : bus_ptrs)
+    {
+        if ((*bus).GetId() == id)
+        {
+            return bus;
+        }
+    }
+
+    return NULL;
+}
+
 unsigned int Model::GetTime()
 {
     return time;
@@ -136,7 +149,7 @@ bool Model::Update()
     {
         for (Virus* &virus : virus_ptrs)
         {
-            if (GetDistanceBetween((*virus).GetLocation(), (*student).GetLocation()) <= 3 && !(*student).IsInfected())
+            if (GetDistanceBetween((*virus).GetLocation(), (*student).GetLocation()) <= 5 && !(*student).IsInfected())
             {
                 if ((*student).GetNumMasks() != 0)
                 {
@@ -150,7 +163,7 @@ bool Model::Update()
                     double chance = rand() / (RAND_MAX + 1.);
                     (*student).RemoveHandSanitizer();
 
-                    if (chance <= 0.4)
+                    if (chance <= 0.6)
                     {
                         cout << (*student).GetName() << " protected him/herself from infection with a hand sanitizer!" << endl;
                         continue;
@@ -243,6 +256,20 @@ void Model::AddNewMember(char code, GameObject* object)
         {
             Virus* new_virus = dynamic_cast <Virus*>(object);
             virus_ptrs.push_back(new_virus);
+            break;
+        }
+
+        case 'h':
+        {
+            Pharmacy* new_pharmacy = dynamic_cast <Pharmacy*>(object);
+            pharmacy_ptrs.push_back(new_pharmacy);
+            break;
+        }
+
+        case 'b':
+        {
+            Bus* new_bus = dynamic_cast <Bus*>(object);
+            bus_ptrs.push_back(new_bus);
             break;
         }
     }

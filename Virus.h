@@ -40,6 +40,7 @@ class Virus : public GameObject
         bool IsAlive();
         bool ShouldBeVisible();
         bool UpdateLocation();
+        void IncreaseEnergy(double value);
 };
 
 #endif

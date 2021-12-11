@@ -1,7 +1,7 @@
 #include "View.h"
 using namespace std;
 
-View::View() : size(11), scale(2), origin(Point2D(0, 0)) {}
+View::View() : size(16), scale(2), origin(Point2D(0, 0)) {}
 
 View::~View() {}
 

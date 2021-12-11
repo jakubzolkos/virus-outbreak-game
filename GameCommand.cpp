@@ -94,6 +94,28 @@ void DoMoveToPharmacyCommand(Model &model, int student_id, int pharmacy_id)
     }
 }
 
+void DoMoveToBusStationCommand(Model &model, int student_id, int bus_station_id)
+{
+    try 
+    {
+        Student *student = model.GetStudentPtr(student_id);
+        Bus *bus = model.GetBusPtr(bus_station_id);
+
+        if (student == NULL || bus == NULL)
+        {
+            throw Invalid_Input("Student or bus station with that ID does not exist");
+        }
+
+        cout << "Moving " << (*student).GetName() << " to Bus Station " << (*bus).GetId() << endl;
+        (*student).StartMovingToBusStation(bus);
+    }
+
+    catch (Invalid_Input &except)
+    {
+        cout << "Invalid input - " << except.msg_ptr << endl;
+    }
+}
+
 void DoStopCommand(Model &model, int student_id)
 {    
     try 
@@ -177,6 +199,29 @@ void DoPurchaseItemsCommand(Model &model, int student_id, char purchase_code, un
         cout << "Invalid input - " << except.msg_ptr << endl;
     }
 
+    
+}
+
+void DoBusTravelCommand(Model &model, int student_id, int bus_station_id)
+{
+    try
+    {
+        Student *student = model.GetStudentPtr(student_id);
+        Bus *bus = model.GetBusPtr(bus_station_id);
+
+        if (student == NULL || bus == NULL)
+        {
+            throw Invalid_Input("Student with that ID doest not exist");
+        }
+
+        cout << (*student).GetName() << " traveling with a bus to Bus Station " << (*bus).GetId() << endl;
+        (*student).BusTravel(bus);
+    }
+
+    catch (Invalid_Input &except)
+    {
+        cout << "Invalid input - " << except.msg_ptr << endl;
+    }
     
 }
 
@@ -266,6 +311,20 @@ void NewCommand(Model &model, char code, int id, Point2D location)
                     break;
                 }
             }
+
+            case 'b':
+            {
+                if (model.GetBusPtr(id) != NULL)
+                    throw (Invalid_Input("Bus Station with ID number " + to_string(id) + " already exists."));
+                
+                else
+                {
+                    Bus *bus = new Bus(id, 7, location);
+                    model.AddNewMember(code, bus);
+                    break;
+                }
+            }
+
 
             // If the type is invalid or any other error occures
             default:

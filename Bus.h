@@ -1,16 +1,22 @@
 #ifndef BUS_H
 #define BUS_H
-#include "GameObject.h"
+#include "Building.h"
 
 
-class Bus : public GameObject
+class Bus : public Building
 {
+    private:
+        double ticket_price = 6.00;
+    
     public:
         Bus();
-        Bus(Point2D in_loc, int in_id, char in_code);
+        Bus(int in_id, double ticket_price, Point2D in_loc);
+        bool CanAffordTicket(double budget);
         virtual ~Bus();
         virtual bool Update();
+        double GetTicketPrice();
         void ShowStatus();
+        bool ShouldBeVisible();
 };
 
 #endif 

@@ -1,6 +1,5 @@
 #include "Student.h"
 #include "Virus.h"
-#include "Model.h"
 #include <random>
 #include <iomanip>
 #include <math.h>
@@ -154,6 +153,28 @@ void Student::StartMovingToPharmacy(Pharmacy* pharmacy)
     }
 }
 
+void Student::StartMovingToBusStation(Bus* bus_station)
+{
+    if (IsInfected())
+    {
+        cout << display_code << id_num << ": I am infected so I can't move to the bus station..." << endl;
+    }
+
+    else if (GetDistanceBetween((*bus_station).GetLocation(), location) == 0)
+    {
+        cout << display_code << id_num << ": I'm already at the Bus Station" << endl;
+        state = AT_BUS_STATION;
+    }
+
+    else
+    {
+        SetupDestination((*bus_station).GetLocation());
+        current_bus_station = bus_station;
+        state = MOVING_TO_BUS_STATION;
+        cout << display_code << id_num << ": On my way to the Bus Station " << (*bus_station).GetId() << "." << endl;
+    }
+}
+
 void Student::StartLearning(unsigned int num_assignments)
 {
     if (IsInfected())
@@ -298,6 +319,32 @@ void Student::PurchaseProduct(char product, unsigned int quantity)
     }
 }
 
+void Student::BusTravel(Bus* bus_station)
+{
+    if (IsInfected())
+        cout << display_code << id_num << ": I am infected, so I can't travel..." << endl << endl;
+    
+    else if (state != AT_BUS_STATION)
+        cout << display_code << id_num << ": I can only travel from a Bust Station." << endl << endl;
+    
+    else if (GetDistanceBetween((*bus_station).GetLocation(), location) == 0)
+    {
+        cout << display_code << id_num << ": I'm already at that Bus Station." << endl;
+        state = AT_BUS_STATION;
+    }
+    
+    else if ((*bus_station).GetTicketPrice() > dollars)
+        cout << display_code << id_num << ": Not enough money to buy a ticket." << endl << endl;
+    
+    else
+    {
+        state = TRAVELING;
+        old_bus_station = current_bus_station;
+        current_bus_station = bus_station;
+        cout << display_code << id_num << ": Traveling to Bus Station " << (*current_bus_station).GetId() << "." << endl;
+    }
+}
+
 bool Student::UpdateLocation()
 {
     double x_distance = fabs(destination.x - location.x);
@@ -319,20 +366,21 @@ bool Student::UpdateLocation()
         {
             double virulence = (*immunity.first).get_virulence(); // Get the virulence of the contracted virus
             double virus_resistance = (*immunity.first).get_resistance(); // Get the virus resistance
-            double student_resistance = immunity.second; // Get current student resistance
-            cout << student_resistance << " " << virulence << endl;
 
-            if (student_resistance >= virulence) // If the student's resistance to the virus exceeds the virulence, continue
+            if (immunity.second >= virulence) // If the student's resistance to the virus exceeds the virulence, continue
                 continue;
             
             else
             {
-                antibodies -= ceil(0.5 * virulence);
-                immunity.second += 1/virus_resistance;
+                antibodies -= ceil(0.3 * virulence);
+                immunity.second += 1/(pow(virus_resistance, 2));
+
+                cout << name << " " << (*immunity.first).get_name() << " immunity: [" << immunity.second << " / " << virulence << "]" << endl;
 
                 if (antibodies <= 0) // If the virus decreases the students antibodies below 0, set the state as INFECTED
                 {
                     antibodies = 0;
+                    (*immunity.first).IncreaseEnergy(virulence - immunity.second);
                     state = INFECTED;
                 }
 
@@ -416,6 +464,10 @@ void Student::ShowStatus()
             cout << " heading to Pharmacy " << (*current_pharmacy).GetId() << " at a speed of " << speed << " at each step of " << delta << "." << endl;
             break;
 
+        case MOVING_TO_BUS_STATION:
+            cout << " heading to Bus Station " << (*current_bus_station).GetId() << " at a speed of " << speed << " at each stepo of " << delta << "." << endl;
+            break;
+
         case IN_CLASS:
             cout << " inside Classroom " << (*current_class).GetId() << "." << endl;
             break;
@@ -426,6 +478,10 @@ void Student::ShowStatus()
         
         case IN_PHARMACY:
             cout << " in Pharmacy " << (*current_pharmacy).GetId() << "." << endl;
+            break;
+
+        case AT_BUS_STATION:
+            cout << " at Bus Station " << (*current_bus_station).GetId() << "." << endl;
             break;
         
         case STUDYING_IN_CLASS:
@@ -439,6 +495,9 @@ void Student::ShowStatus()
         case PURCHASING_ITEMS:
             cout << " purchasing items in Pharmacy " << (*current_pharmacy).GetId() << "." << endl;
             break; 
+        
+        case TRAVELING:
+            cout << " traveling to Bus Station " << (*current_bus_station).GetId() << "." << endl;
     }
 
     cout << "\tAntibodies: " << antibodies << endl;
@@ -478,6 +537,12 @@ bool Student::Update()
                 is_in_pharmacy = false;
             }
 
+            if (is_at_bus_station && old_bus_station != NULL)
+            {
+                (*old_bus_station).RemoveOneStudent();
+                is_at_bus_station = false;
+            }
+
             bool arrived = UpdateLocation();
 
             if (antibodies == 0)
@@ -515,6 +580,12 @@ bool Student::Update()
             {
                 (*old_pharmacy).RemoveOneStudent();
                 is_in_pharmacy = false;
+            }
+
+            if (is_at_bus_station && old_bus_station != NULL)
+            {
+                (*old_bus_station).RemoveOneStudent();
+                is_at_bus_station = false;
             }
 
             bool arrived_in_class = UpdateLocation();
@@ -559,6 +630,12 @@ bool Student::Update()
                 is_in_pharmacy = false;
             }
 
+            if (is_at_bus_station && old_bus_station != NULL)
+            {
+                (*old_bus_station).RemoveOneStudent();
+                is_at_bus_station = false;
+            }
+
             bool arrived_at_doctors = UpdateLocation();
 
             if (antibodies == 0)
@@ -600,6 +677,12 @@ bool Student::Update()
                 is_in_pharmacy = false;
             }
 
+            if (is_at_bus_station && old_bus_station != NULL)
+            {
+                (*old_bus_station).RemoveOneStudent();
+                is_at_bus_station = false;
+            }
+
             bool arrived_in_pharmacy = UpdateLocation();
 
             if (antibodies == 0)
@@ -622,6 +705,54 @@ bool Student::Update()
                 return false;
         }
 
+        case MOVING_TO_BUS_STATION:
+        {
+            if (is_in_class && old_classroom != NULL)
+            {
+                (*old_classroom).RemoveOneStudent();
+                is_in_class = false;
+            }
+
+            if (is_at_doctor && old_office != NULL)
+            {
+                (*old_office).RemoveOneStudent();
+                is_at_doctor = false;
+            }
+
+            if (is_in_pharmacy && old_pharmacy != NULL)
+            {
+                (*old_pharmacy).RemoveOneStudent();
+                is_in_pharmacy = false;
+            }
+
+            if (is_at_bus_station && old_bus_station != NULL)
+            {
+                (*old_bus_station).RemoveOneStudent();
+                is_at_bus_station = false;
+            }
+
+            bool arrived_at_bus_station = UpdateLocation();
+
+            if (antibodies == 0)
+            {
+                state = INFECTED;
+                return true;
+            }
+
+
+            else if (arrived_at_bus_station)
+            {
+                state = AT_BUS_STATION;
+                is_at_bus_station = true;
+                old_bus_station = current_bus_station;
+                (*current_bus_station).AddOneStudent();
+                return true;
+            }
+
+            else
+                return false;
+        }
+
         case IN_CLASS:
             return false;
 
@@ -629,6 +760,9 @@ bool Student::Update()
             return false;
 
         case IN_PHARMACY:
+            return false;
+        
+        case AT_BUS_STATION:
             return false;
         
         case STUDYING_IN_CLASS:
@@ -682,6 +816,17 @@ bool Student::Update()
                     state = IN_PHARMACY;
                     return true;
             }
+        }
+
+        case TRAVELING:
+        {
+            Vector2D delta = (*current_bus_station).GetLocation() - (*old_bus_station).GetLocation();
+            location = location + delta;
+            (*current_bus_station).AddOneStudent();
+            dollars -= (*old_bus_station).GetTicketPrice();
+            cout << "** " << name << " arrived at Bus Station " << (*current_bus_station).GetId() << "! **" << endl;
+            state = AT_BUS_STATION;
+            return true;
         }
 
     }

@@ -67,7 +67,7 @@ bool Virus::UpdateLocation()
             // This ensures that the virus objects always stay in display
             while (true)
             {
-                Vector2D delta(2*cos(distr(eng)), 2*sin(distr(eng)));
+                Vector2D delta(3*cos(distr(eng)), 3*sin(distr(eng)));
                 location = location + delta;
 
                 if (location.x >= 0 && location.x <= view_maxsize && location.y >= 0 && location.y <= view_maxsize)
@@ -188,4 +188,9 @@ void Virus::destroy_self()
 {
     state = DEAD;
     energy = 0.0;
+}
+
+void Virus::IncreaseEnergy(double value)
+{
+    energy += value;
 }

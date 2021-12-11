@@ -2,7 +2,7 @@
 #define VIEW_H
 #include "GameObject.h"
 
-const int view_maxsize = 20;
+const int view_maxsize = 30;
 
 class View
 {
