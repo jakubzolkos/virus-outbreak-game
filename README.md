@@ -2,7 +2,7 @@
 Welcome to the game!
 
 ## About The Game
-The objective of the game is to complete all assignments in the classrooms located around the map before all students lose their antibodies. 
+The objective of the game is to complete all assignments in the classrooms located around the map before all students lose their antibodies. The user controls students on 
 
 
 ## Newest Changes
@@ -27,3 +27,6 @@ Because two new static building objects have been introduced to the game, I deci
 
 In addition to the loss of antibodies that the student experience every turn, the game now features a virus class which can increase that effect based on the virus' virulence. If the student finds themselves in the proximity of 5 units around a virus and doesn't have any protection items, they will become infected with a virus. The student will lose additional antibodies each turn equal to the formula: ceil(0.3 * virulence). However, with each passing turn, the student builds up immunity to the virus according to the formula: 1/virus_resistance. When the student's immunity reaches the virus' virulence, the virus is eradicated from the game. However, if the student runs out of antibodies while having a virus, the student is eliminated and the virus escapes to the environment again, while gaining energy equal to the difference between the virulence and the hosts immunity. When the virus doesn't have a host, it loses energy every turn according to the formula: -1/pow(virus_resistance, 3). 
 
+### Adding Objects
+
+The user can now add additional objects to the game by using a new 'n' command which takes the following paramt
