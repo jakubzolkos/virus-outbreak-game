@@ -6,7 +6,7 @@ The objective of the game is to complete all assignments in the classrooms locat
 
 ### Game Commands
 - **q**
--
+  - exits the game
 
 
 ## Newest Changes
