@@ -8,7 +8,12 @@ The objective of the game is to complete all assignments in the classrooms locat
 - **g** - increments game time by 1 unit
 - **r** - increments game time by 5 units or until any objects changes status
 - **m student_id x y** - commands the student with a chosen student ID to move to location (x,y) on the map
-- **d student_id office_id** - commands the student with a chosen student ID to go to the doctor's office with a chosen office ID
+- **[building_code] student_id office_id** - commands the student with a chosen student ID to go to the building with a chosen ID:
+  - **d** - Doctor's Office
+  - **c** - Classroom
+  - **p** - Pharmacy
+  - **b** - Bus Stop
+
 - **q** - exits the game
 
 ## Newest Changes
