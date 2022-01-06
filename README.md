@@ -13,6 +13,10 @@ The objective of the game is to complete all assignments in the classrooms locat
   - **c** - Classroom
   - **p** - Pharmacy
   - **b** - Bus Stop
+
+<br />
+<br />
+
 - **v student_id num_vaccines** - if the student with the chosen ID is at a Doctor's Office, buys the chosen number of vaccines that recover student antibodies
 - **a student_id num_assignments** - if the student with the chosen ID is in a Classroom, completes the chosen number of assignments
 - **t student_id target_stop** - if the student with the chosen ID is at a Bus Station, the student travels to the target station
@@ -20,6 +24,10 @@ The objective of the game is to complete all assignments in the classrooms locat
   - **s** - hand sanitizer
   - **d** - medicine
   - **m** - mask 
+
+<br />
+<br />
+
 - **s student_id** - commands the student with the chosen ID to cease movement
 - **q** - exits the game
 
