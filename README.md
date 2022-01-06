@@ -1,7 +1,10 @@
 # Virus Outbreak Terminal Game
+Welcome to the game!
 
 ## About The Game
-The objective of the game is to complete all assignments in the classrooms located around the map. 
+The objective of the game is to complete all assignments in the classrooms located around the map before all students lose their antibodies. 
+
+
 
 ## Pharmacy
 
