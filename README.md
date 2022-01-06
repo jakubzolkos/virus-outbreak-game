@@ -5,7 +5,7 @@ Welcome to the game!
 The objective of the game is to complete all assignments in the classrooms located around the map before all students lose their antibodies. The user controls students on the 30x30 units grid map using various commands. 
 
 ### Game Commands
--
+- **q**
 -
 
 
