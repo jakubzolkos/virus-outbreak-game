@@ -5,6 +5,10 @@ Welcome to the game!
 The objective of the game is to complete all assignments in the classrooms located around the map before all students lose their antibodies. The user controls students on the 30x30 units grid map using various commands. 
 
 ### Game Commands
+- **g** - increments game time by 1 unit
+- **r** - increments game time by 5 units or until any objects changes status
+- **m student_id x y** - commands the student with a chosen student ID to move to location (x,y) on the map
+- **d student_id office_id** - commands the student with a chosen student ID to go to the doctor's office with a chosen office ID
 - **q** - exits the game
 
 ## Newest Changes
