@@ -1,5 +1,7 @@
-# COVID-19 Terminal Game
+# Virus Outbreak Terminal Game
 
+## About The Game
+The objective of the game is to complete all assignments in the classrooms located around the map. 
 
 ## Pharmacy
 
