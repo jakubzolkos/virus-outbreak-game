@@ -2,7 +2,7 @@
 Welcome to the game!
 
 ## About The Game
-The objective of the game is to complete all assignments in the classrooms located around the map before all students lose their antibodies. The user controls students on the 30x30 units grid map using a set of commands list below. 
+The objective of the game is to complete all assignments in the classrooms located around the map before all students lose their antibodies. The user controls students on the 30x30 units grid map using a set of commands list below. Each student has a specific number of antibodies, money, and consumable items. Unless the student contracts a virus they lose 1 antibody per game time unit. With each time unit, the student gains a random amount of money from 1 to 2 dollars that they cen spend to complete assignments in classrooms, replenish antibodies in doctor's offices, buy consumable items at pharmacies, or fast travel on the map from bus stations.
 
 ### Game Commands
 - **g** - increments game time by 1 unit
