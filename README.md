@@ -34,7 +34,7 @@ The objective of the game is to complete all assignments in the classrooms locat
 - **s student_id** - commands the student with the chosen ID to cease movement
 - **q** - exits the game
 
-### Installation
+## Installation
 
 Open the terminal and change the directory to where you would like download the project.
 
