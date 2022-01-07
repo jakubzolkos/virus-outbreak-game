@@ -2,7 +2,7 @@
 Welcome to the game!
 
 ## About The Game
-The objective of the game is to complete all assignments in the classrooms located around the map before all students lose their antibodies. The user controls students on the 30x30 units grid map using various commands. 
+The objective of the game is to complete all assignments in the classrooms located around the map before all students lose their antibodies. The user controls students on the 30x30 units grid map using a set of commands list below. 
 
 ### Game Commands
 - **g** - increments game time by 1 unit
@@ -33,6 +33,25 @@ The objective of the game is to complete all assignments in the classrooms locat
 
 - **s student_id** - commands the student with the chosen ID to cease movement
 - **q** - exits the game
+
+### Installation
+
+Open the terminal and change the directory to where you would like download the project.
+
+1. Clone the repo
+   ```sh
+   git clone https://github.com/jakubzolkos/virus-outbreak-game.git
+   ```
+2. Run Makefile
+   ```sh
+   make
+   ```
+3. Run the game
+   ```sh
+   ./game
+   ```
+
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Newest Changes
 
